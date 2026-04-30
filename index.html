@@ -1,148 +1,379 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BudgetAI</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SmartBudget — AI Financial Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#f7f5f0;--card:#fff;--accent:#1a5c38;--accent2:#e8f5ee;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--danger:#dc2626;--radius:16px;}
+    :root{--bg:#faf8ff;--card:#fff;--accent:#7c3aed;--accent2:#ede9fe;--accent3:#5b21b6;--text:#1a1a2e;--muted:#6b7280;--border:#e9e4ff;--danger:#dc2626;--success:#059669;--radius:18px;}
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-    header{background:var(--accent);color:white;padding:20px 24px;display:flex;align-items:center;gap:12px;}
-    header h1{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;}
-    header span{font-size:12px;opacity:0.75;}
-    .logo-icon{width:36px;height:36px;background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-    .container{max-width:680px;margin:0 auto;padding:24px 16px 80px;}
-    .hero{text-align:center;padding:32px 16px 24px;}
-    .hero h2{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;line-height:1.3;margin-bottom:10px;}
-    .hero p{font-size:15px;color:var(--muted);line-height:1.6;}
-    .card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:16px;border:1px solid var(--border);}
-    .card-title{font-size:13px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+    /* NAV */
+    nav{background:white;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 1px 12px rgba(124,58,237,0.07);}
+    .nav-logo{display:flex;align-items:center;gap:10px;}
+    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .nav-logo-text{font-size:17px;font-weight:700;color:var(--accent);}
+    .nav-right{display:flex;align-items:center;gap:12px;}
+    .btn-lang{background:var(--accent2);border:none;border-radius:8px;padding:6px 12px;font-size:13px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+    .btn-lang:hover{background:#ddd6fe;}
+    .btn-start{background:var(--accent);border:none;border-radius:8px;padding:8px 18px;font-size:13px;color:white;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+    .btn-start:hover{background:var(--accent3);}
+
+    /* PAGES */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* LANDING */
+    .hero-section{background:linear-gradient(135deg,#7c3aed 0%,#5b21b6 100%);color:white;padding:80px 24px 100px;text-align:center;}
+    .hero-section h1{font-size:42px;font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px;}
+    .hero-section h1 em{font-style:normal;opacity:0.85;}
+    .hero-section p{font-size:17px;opacity:0.85;max-width:500px;margin:0 auto 36px;line-height:1.7;font-weight:300;}
+    .btn-hero{background:white;color:var(--accent);border:none;border-radius:14px;padding:16px 40px;font-size:17px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 8px 30px rgba(0,0,0,0.15);transition:transform 0.2s;}
+    .btn-hero:hover{transform:translateY(-2px);}
+    .hero-sub{font-size:13px;opacity:0.65;margin-top:14px;}
+
+    /* FEATURES */
+    .features{padding:64px 24px;max-width:900px;margin:0 auto;}
+    .features h2{text-align:center;font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text);}
+    .features-sub{text-align:center;color:var(--muted);margin-bottom:48px;font-size:15px;}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+    .feature-card{background:white;border-radius:var(--radius);padding:24px;border:1px solid var(--border);text-align:center;}
+    .feature-icon{font-size:32px;margin-bottom:12px;}
+    .feature-title{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text);}
+    .feature-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+    /* PRICING */
+    .pricing{background:white;padding:64px 24px;border-top:1px solid var(--border);}
+    .pricing h2{text-align:center;font-size:28px;font-weight:700;margin-bottom:8px;}
+    .pricing-sub{text-align:center;color:var(--muted);margin-bottom:48px;font-size:15px;}
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:780px;margin:0 auto;}
+    .price-card{border-radius:var(--radius);padding:32px 24px;border:1.5px solid var(--border);position:relative;}
+    .price-card.popular{border-color:var(--accent);box-shadow:0 8px 30px rgba(124,58,237,0.15);}
+    .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;white-space:nowrap;}
+    .price-name{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;}
+    .price-amount{font-size:36px;font-weight:800;color:var(--text);margin-bottom:4px;}
+    .price-amount span{font-size:16px;font-weight:400;color:var(--muted);}
+    .price-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+    .price-features{list-style:none;margin-bottom:28px;}
+    .price-features li{font-size:13px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+    .price-features li:last-child{border-bottom:none;}
+    .check{color:var(--accent);font-weight:700;}
+    .btn-price{width:100%;padding:13px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+    .btn-price.primary{background:var(--accent);color:white;}
+    .btn-price.primary:hover{background:var(--accent3);}
+    .btn-price.secondary{background:var(--accent2);color:var(--accent);}
+    .btn-price.secondary:hover{background:#ddd6fe;}
+
+    /* APP */
+    .app-container{max-width:680px;margin:0 auto;padding:28px 16px 80px;}
+    .app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .app-title{font-size:20px;font-weight:700;color:var(--text);}
+    .app-title span{color:var(--accent);}
+    .card{background:var(--card);border-radius:var(--radius);padding:22px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 1px 8px rgba(124,58,237,0.05);}
+    .card-title{font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;}
     .field{margin-bottom:14px;}
     .field label{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;}
-    .field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;background:#fafafa;color:var(--text);-webkit-appearance:none;}
+    .field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;font-family:'Inter',sans-serif;background:#faf8ff;color:var(--text);-webkit-appearance:none;transition:border-color 0.2s;}
     .field input:focus,.field select:focus{outline:none;border-color:var(--accent);background:white;}
     .input-prefix{position:relative;}
     .input-prefix span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;}
     .input-prefix input{padding-left:28px;}
     .expense-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;margin-bottom:10px;}
-    .expense-row input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;background:#fafafa;color:var(--text);}
+    .expense-row input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;background:#faf8ff;color:var(--text);}
     .expense-row input:focus{outline:none;border-color:var(--accent);background:white;}
     .amount-input{position:relative;width:120px;}
     .amount-input span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;}
     .amount-input input{padding-left:22px!important;width:120px;}
     .btn-remove{background:#fee2e2;border:none;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--danger);font-size:16px;flex-shrink:0;}
-    .btn-add{background:var(--accent2);border:1.5px dashed var(--accent);border-radius:10px;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:10px;width:100%;cursor:pointer;margin-top:4px;}
-    .btn-analyze{background:var(--accent);color:white;border:none;border-radius:12px;font-family:'DM Serif Display',serif;font-size:18px;padding:16px;width:100%;cursor:pointer;margin-top:8px;}
-    .btn-analyze:hover{opacity:0.9;}
-    .result-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;display:none;}
+    .btn-add{background:var(--accent2);border:1.5px dashed var(--accent);border-radius:11px;color:var(--accent);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:11px;width:100%;cursor:pointer;margin-top:4px;transition:background 0.15s;}
+    .btn-add:hover{background:#ddd6fe;}
+    .btn-analyze{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:13px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;padding:17px;width:100%;cursor:pointer;margin-top:8px;box-shadow:0 4px 20px rgba(124,58,237,0.3);transition:transform 0.15s,opacity 0.15s;}
+    .btn-analyze:hover{transform:translateY(-1px);}
+    .btn-analyze:active{transform:scale(0.98);}
+    .result-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;display:none;box-shadow:0 4px 20px rgba(124,58,237,0.1);}
     .result-card.visible{display:block;}
-    .result-header{background:var(--accent);color:white;padding:16px 20px;}
-    .result-header h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;}
-    .result-header p{font-size:12px;opacity:0.8;margin-top:2px;}
-    .result-body{padding:20px;}
+    .result-header{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;padding:18px 22px;}
+    .result-header h3{font-size:18px;font-weight:700;}
+    .result-header p{font-size:12px;opacity:0.8;margin-top:3px;}
+    .result-body{padding:22px;}
     .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-    .summary-box{background:var(--bg);border-radius:10px;padding:12px;text-align:center;}
-    .summary-box .val{font-size:18px;font-weight:600;}
-    .summary-box .val.green{color:var(--accent);}
+    .summary-box{background:var(--bg);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--border);}
+    .summary-box .val{font-size:19px;font-weight:700;}
+    .summary-box .val.green{color:var(--success);}
     .summary-box .val.red{color:var(--danger);}
+    .summary-box .val.purple{color:var(--accent);}
     .summary-box .lbl{font-size:11px;color:var(--muted);margin-top:3px;}
-    .ai-response{font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap;}
+    .ai-response{font-size:14px;line-height:1.85;color:var(--text);white-space:pre-wrap;}
     .loading{display:flex;align-items:center;gap:10px;padding:16px 0;color:var(--muted);font-size:14px;}
     .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    .bar-wrap{margin-top:16px;}
-    .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;}
-    .bar-label{width:110px;flex-shrink:0;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .bar-wrap{margin-top:4px;}
+    .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;}
+    .bar-label{width:120px;flex-shrink:0;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .bar-bg{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden;}
-    .bar-fill{height:100%;background:var(--accent);border-radius:4px;}
-    .bar-amt{width:70px;text-align:right;font-weight:500;}
-    .section-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:16px 0 8px;}
+    .bar-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#a78bfa);border-radius:4px;transition:width 0.6s ease;}
+    .bar-amt{width:70px;text-align:right;font-weight:600;color:var(--text);}
+    .section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin:18px 0 10px;}
     .error-box{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;color:var(--danger);font-size:13px;margin-top:8px;display:none;}
-    .footer{text-align:center;color:var(--muted);font-size:12px;padding:16px;}
+    .footer{text-align:center;color:var(--muted);font-size:12px;padding:20px;}
+    .footer strong{color:var(--accent);}
   </style>
 </head>
 <body>
-<header>
-  <div class="logo-icon">💰</div>
-  <div><h1>BudgetAI</h1><span>Asistente de presupuesto inteligente</span></div>
-</header>
-<div class="container">
-  <div class="hero">
-    <h2>¿A dónde se va<br><em>tu dinero</em> cada mes?</h2>
-    <p>Ingresa tus ingresos y gastos. La IA te dirá exactamente dónde puedes ahorrar.</p>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">💜</div>
+    <span class="nav-logo-text">SmartBudget</span>
   </div>
-  <div class="card">
-    <div class="card-title">💵 Ingresos mensuales</div>
-    <div class="field"><label>Salario / trabajo principal</label><div class="input-prefix"><span>$</span><input type="number" id="income-main" placeholder="0" min="0" /></div></div>
-    <div class="field"><label>Ingresos extra (Uber, freelance, etc.)</label><div class="input-prefix"><span>$</span><input type="number" id="income-extra" placeholder="0" min="0" /></div></div>
+  <div class="nav-right">
+    <button class="btn-lang" onclick="toggleLang()">🌐 <span id="lang-label">ES</span></button>
+    <button class="btn-start" onclick="showPage('app')" id="nav-cta">Empezar gratis</button>
   </div>
-  <div class="card">
-    <div class="card-title">📋 Gastos mensuales</div>
-    <div id="expenses-list"></div>
-    <button class="btn-add" onclick="addExpense()">+ Agregar gasto</button>
+</nav>
+
+<!-- LANDING PAGE -->
+<div class="page active" id="page-landing">
+  <div class="hero-section">
+    <h1 id="hero-title">Tu dinero,<br><em>bajo control.</em></h1>
+    <p id="hero-sub">SmartBudget analiza tus ingresos y gastos con IA y te dice exactamente dónde puedes ahorrar.</p>
+    <button class="btn-hero" onclick="showPage('app')" id="hero-btn">Analizar mi presupuesto →</button>
+    <div class="hero-sub" id="hero-free">✓ Gratis &nbsp;·&nbsp; ✓ Sin registro &nbsp;·&nbsp; ✓ Resultados en segundos</div>
   </div>
-  <div class="card">
-    <div class="card-title">🏠 Información del hogar</div>
-    <div class="field"><label>Personas en el hogar</label>
-      <select id="household">
-        <option value="1">Solo yo</option>
-        <option value="2" selected>2 personas</option>
-        <option value="3">3 personas</option>
-        <option value="4">4 personas</option>
-        <option value="5+">5 o más</option>
-      </select>
-    </div>
-    <div class="field"><label>Estado</label>
-      <select id="state">
-        <option value="">Selecciona...</option>
-        <option value="South Carolina" selected>South Carolina</option>
-        <option value="Florida">Florida</option>
-        <option value="Texas">Texas</option>
-        <option value="California">California</option>
-        <option value="New York">New York</option>
-        <option value="Georgia">Georgia</option>
-        <option value="North Carolina">North Carolina</option>
-        <option value="otro">Otro estado</option>
-      </select>
-    </div>
-  </div>
-  <div class="error-box" id="error-box">Por favor ingresa al menos un ingreso y un gasto.</div>
-  <button class="btn-analyze" onclick="analyze()">Analizar mi presupuesto →</button>
-  <div class="result-card" id="result-card">
-    <div class="result-header"><h3>Tu análisis financiero</h3><p>Generado por IA · personalizado para ti</p></div>
-    <div class="result-body">
-      <div class="summary-grid" id="summary-grid"></div>
-      <div class="section-label">Distribución de gastos</div>
-      <div class="bar-wrap" id="bar-chart"></div>
-      <div class="section-label" style="margin-top:20px">Recomendaciones de la IA</div>
-      <div id="ai-output">
-        <div class="loading" id="loading-indicator">
-          <div class="spinner"></div>Analizando tu situación financiera...
-        </div>
+
+  <div class="features">
+    <h2 id="feat-title">¿Por qué SmartBudget?</h2>
+    <p class="features-sub" id="feat-sub">La forma más inteligente de entender tus finanzas</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title" id="f1t">Análisis con IA</div>
+        <div class="feature-desc" id="f1d">Recomendaciones personalizadas generadas por inteligencia artificial en segundos.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title" id="f2t">Visualización clara</div>
+        <div class="feature-desc" id="f2d">Gráficas simples que te muestran a dónde va cada dólar de tu dinero.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title" id="f3t">100% Privado</div>
+        <div class="feature-desc" id="f3d">Tus datos no se guardan. Todo se procesa en el momento y listo.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title" id="f4t">Bilingüe</div>
+        <div class="feature-desc" id="f4d">Disponible en inglés y español. Para todos.</div>
       </div>
     </div>
   </div>
-  <div class="footer">BudgetAI · Powered by Claude AI · Gratis para todos</div>
+
+  <div class="pricing">
+    <h2 id="price-title">Planes simples</h2>
+    <p class="pricing-sub" id="price-sub">Empieza gratis, crece cuando quieras</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name" id="p1name">Gratis</div>
+        <div class="price-amount">$0<span id="p1mo">/mes</span></div>
+        <div class="price-desc" id="p1desc">Para empezar a tomar control de tus finanzas</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> <span id="p1f1">5 análisis por mes</span></li>
+          <li><span class="check">✓</span> <span id="p1f2">Gráficas de gastos</span></li>
+          <li><span class="check">✓</span> <span id="p1f3">Recomendaciones básicas</span></li>
+        </ul>
+        <button class="btn-price secondary" onclick="showPage('app')" id="p1btn">Empezar gratis</button>
+      </div>
+      <div class="price-card popular">
+        <div class="popular-badge" id="pop-badge">⭐ Más popular</div>
+        <div class="price-name" id="p2name">Pro</div>
+        <div class="price-amount">$4.99<span id="p2mo">/mes</span></div>
+        <div class="price-desc" id="p2desc">Para quienes toman sus finanzas en serio</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> <span id="p2f1">Análisis ilimitados</span></li>
+          <li><span class="check">✓</span> <span id="p2f2">Historial de 12 meses</span></li>
+          <li><span class="check">✓</span> <span id="p2f3">Plan de ahorro personalizado</span></li>
+          <li><span class="check">✓</span> <span id="p2f4">Soporte prioritario</span></li>
+        </ul>
+        <button class="btn-price primary" onclick="showPage('app')" id="p2btn">Empezar Pro</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer">© 2026 <strong>SmartBudget</strong> · Powered by Claude AI</div>
 </div>
+
+<!-- APP PAGE -->
+<div class="page" id="page-app">
+  <div class="app-container">
+    <div class="app-header">
+      <div class="app-title"><span>Smart</span>Budget</div>
+      <button class="btn-lang" onclick="toggleLang()">🌐 <span id="lang-label2">ES</span></button>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="inc-title">💵 Ingresos mensuales</div>
+      <div class="field"><label id="inc-main-label">Salario / trabajo principal</label><div class="input-prefix"><span>$</span><input type="number" id="income-main" placeholder="0" min="0"/></div></div>
+      <div class="field"><label id="inc-extra-label">Ingresos extra (Uber, freelance, etc.)</label><div class="input-prefix"><span>$</span><input type="number" id="income-extra" placeholder="0" min="0"/></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="exp-title">📋 Gastos mensuales</div>
+      <div id="expenses-list"></div>
+      <button class="btn-add" onclick="addExpense()" id="btn-add-exp">+ Agregar gasto</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="home-title">🏠 Información del hogar</div>
+      <div class="field"><label id="home-people-label">Personas en el hogar</label>
+        <select id="household">
+          <option value="1" id="h1">Solo yo</option>
+          <option value="2" selected id="h2">2 personas</option>
+          <option value="3" id="h3">3 personas</option>
+          <option value="4" id="h4">4 personas</option>
+          <option value="5+" id="h5">5 o más</option>
+        </select>
+      </div>
+      <div class="field"><label id="state-label">Estado</label>
+        <select id="state">
+          <option value="">Selecciona...</option>
+          <option value="South Carolina" selected>South Carolina</option>
+          <option value="Florida">Florida</option>
+          <option value="Texas">Texas</option>
+          <option value="California">California</option>
+          <option value="New York">New York</option>
+          <option value="Georgia">Georgia</option>
+          <option value="North Carolina">North Carolina</option>
+          <option value="otro">Otro estado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="error-box" id="error-box">Por favor ingresa al menos un ingreso y un gasto.</div>
+    <button class="btn-analyze" onclick="analyze()" id="btn-analyze">Analizar mi presupuesto →</button>
+
+    <div class="result-card" id="result-card">
+      <div class="result-header">
+        <h3 id="result-title">Tu análisis financiero</h3>
+        <p id="result-sub">Generado por IA · personalizado para ti</p>
+      </div>
+      <div class="result-body">
+        <div class="summary-grid" id="summary-grid"></div>
+        <div class="section-label" id="dist-label">Distribución de gastos</div>
+        <div class="bar-wrap" id="bar-chart"></div>
+        <div class="section-label" id="rec-label" style="margin-top:20px">Recomendaciones de la IA</div>
+        <div id="ai-output">
+          <div class="loading" id="loading-indicator">
+            <div class="spinner"></div><span id="loading-text">Analizando tu situación financiera...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">© 2026 <strong>SmartBudget</strong> · Powered by Claude AI</div>
+  </div>
+</div>
+
 <script>
-  const DEFAULTS=['Renta / Mortgage','Comida / Groceries','Electricidad','Internet / Celular','Transporte / Gas'];
-  function initExpenses(){ DEFAULTS.forEach(n=>addExpense(n)); }
+  let lang = 'es';
+  const t = {
+    es:{
+      navCta:'Empezar gratis', heroTitle:'Tu dinero,<br><em>bajo control.</em>',
+      heroSub:'SmartBudget analiza tus ingresos y gastos con IA y te dice exactamente dónde puedes ahorrar.',
+      heroBtn:'Analizar mi presupuesto →', heroFree:'✓ Gratis · ✓ Sin registro · ✓ Resultados en segundos',
+      featTitle:'¿Por qué SmartBudget?', featSub:'La forma más inteligente de entender tus finanzas',
+      f1t:'Análisis con IA',f1d:'Recomendaciones personalizadas generadas por inteligencia artificial en segundos.',
+      f2t:'Visualización clara',f2d:'Gráficas simples que te muestran a dónde va cada dólar de tu dinero.',
+      f3t:'100% Privado',f3d:'Tus datos no se guardan. Todo se procesa en el momento y listo.',
+      f4t:'Bilingüe',f4d:'Disponible en inglés y español. Para todos.',
+      priceTitle:'Planes simples',priceSub:'Empieza gratis, crece cuando quieras',
+      p1name:'Gratis',p1mo:'/mes',p1desc:'Para empezar a tomar control de tus finanzas',
+      p1f1:'5 análisis por mes',p1f2:'Gráficas de gastos',p1f3:'Recomendaciones básicas',p1btn:'Empezar gratis',
+      popBadge:'⭐ Más popular',p2name:'Pro',p2mo:'/mes',p2desc:'Para quienes toman sus finanzas en serio',
+      p2f1:'Análisis ilimitados',p2f2:'Historial de 12 meses',p2f3:'Plan de ahorro personalizado',p2f4:'Soporte prioritario',p2btn:'Empezar Pro',
+      incTitle:'💵 Ingresos mensuales',incMain:'Salario / trabajo principal',incExtra:'Ingresos extra (Uber, freelance, etc.)',
+      expTitle:'📋 Gastos mensuales',addExp:'+ Agregar gasto',homeTitle:'🏠 Información del hogar',
+      homePeople:'Personas en el hogar',stateLabel:'Estado',
+      analyzeBtn:'Analizar mi presupuesto →',errorMsg:'Por favor ingresa al menos un ingreso y un gasto.',
+      resultTitle:'Tu análisis financiero',resultSub:'Generado por IA · personalizado para ti',
+      distLabel:'Distribución de gastos',recLabel:'Recomendaciones de la IA',loadingText:'Analizando tu situación financiera...',
+      incLabel:'Ingresos',expLabel:'Gastos',balLabel:'Balance',
+      defaults:['Renta / Mortgage','Comida / Groceries','Electricidad','Internet / Celular','Transporte / Gas','Seguro de carro','Salud','Entretenimiento'],
+      prompt:(ti,te,bal,exps,hh,st)=>'Eres un asesor financiero amigable para familias americanas.\n\nSituación mensual:\nIngresos: $'+ti+'\nGastos:\n'+exps+'\nTotal gastos: $'+te+'\nBalance: $'+bal+'\nHogar: '+hh+' persona(s)\nEstado: '+st+'\n\nDa un análisis completo en español: evalúa la situación, señala los 2-3 gastos más altos, sugiere cuánto puede ahorrar con cambios específicos, da un consejo práctico para esta semana y una meta realista para 3 meses. Usa números concretos y sé motivador. Máximo 300 palabras.'
+    },
+    en:{
+      navCta:'Get started free', heroTitle:'Your money,<br><em>under control.</em>',
+      heroSub:'SmartBudget uses AI to analyze your income and expenses and tells you exactly where you can save.',
+      heroBtn:'Analyze my budget →', heroFree:'✓ Free · ✓ No signup · ✓ Results in seconds',
+      featTitle:'Why SmartBudget?', featSub:'The smartest way to understand your finances',
+      f1t:'AI Analysis',f1d:'Personalized recommendations generated by artificial intelligence in seconds.',
+      f2t:'Clear Visuals',f2d:'Simple charts that show you where every dollar of your money goes.',
+      f3t:'100% Private',f3d:'Your data is never stored. Everything is processed in the moment.',
+      f4t:'Bilingual',f4d:'Available in English and Spanish. For everyone.',
+      priceTitle:'Simple Pricing',priceSub:'Start free, grow when you are ready',
+      p1name:'Free',p1mo:'/mo',p1desc:'To start taking control of your finances',
+      p1f1:'5 analyses per month',p1f2:'Expense charts',p1f3:'Basic recommendations',p1btn:'Start free',
+      popBadge:'⭐ Most popular',p2name:'Pro',p2mo:'/mo',p2desc:'For those who take their finances seriously',
+      p2f1:'Unlimited analyses',p2f2:'12-month history',p2f3:'Personalized savings plan',p2f4:'Priority support',p2btn:'Start Pro',
+      incTitle:'💵 Monthly Income',incMain:'Salary / main job',incExtra:'Extra income (Uber, freelance, etc.)',
+      expTitle:'📋 Monthly Expenses',addExp:'+ Add expense',homeTitle:'🏠 Household Info',
+      homePeople:'People in household',stateLabel:'State',
+      analyzeBtn:'Analyze my budget →',errorMsg:'Please enter at least one income and one expense.',
+      resultTitle:'Your Financial Analysis',resultSub:'AI-generated · personalized for you',
+      distLabel:'Expense Breakdown',recLabel:'AI Recommendations',loadingText:'Analyzing your financial situation...',
+      incLabel:'Income',expLabel:'Expenses',balLabel:'Balance',
+      defaults:['Rent / Mortgage','Food / Groceries','Electricity','Internet / Phone','Transportation / Gas','Car Insurance','Health','Entertainment'],
+      prompt:(ti,te,bal,exps,hh,st)=>'You are a friendly financial advisor for American families.\n\nMonthly situation:\nIncome: $'+ti+'\nExpenses:\n'+exps+'\nTotal expenses: $'+te+'\nBalance: $'+bal+'\nHousehold: '+hh+' person(s)\nState: '+st+'\n\nGive a complete analysis in English: evaluate the situation, highlight the 2-3 highest expenses, suggest how much they could save with specific changes, give a practical tip for this week and a realistic 3-month savings goal. Use concrete numbers and be motivating. Max 300 words.'
+    }
+  };
+
+  function setText(id, val){ const el=document.getElementById(id); if(el) el.innerHTML=val; }
+  function applyLang(){
+    const l=t[lang];
+    setText('nav-cta',l.navCta); setText('hero-title',l.heroTitle); setText('hero-sub',l.heroSub);
+    setText('hero-btn',l.heroBtn); setText('hero-free',l.heroFree); setText('feat-title',l.featTitle);
+    setText('feat-sub',l.featSub); setText('f1t',l.f1t); setText('f1d',l.f1d); setText('f2t',l.f2t);
+    setText('f2d',l.f2d); setText('f3t',l.f3t); setText('f3d',l.f3d); setText('f4t',l.f4t); setText('f4d',l.f4d);
+    setText('price-title',l.priceTitle); setText('price-sub',l.priceSub); setText('p1name',l.p1name);
+    setText('p1mo',l.p1mo); setText('p1desc',l.p1desc); setText('p1f1',l.p1f1); setText('p1f2',l.p1f2);
+    setText('p1f3',l.p1f3); setText('p1btn',l.p1btn); setText('pop-badge',l.popBadge); setText('p2name',l.p2name);
+    setText('p2mo',l.p2mo); setText('p2desc',l.p2desc); setText('p2f1',l.p2f1); setText('p2f2',l.p2f2);
+    setText('p2f3',l.p2f3); setText('p2f4',l.p2f4); setText('p2btn',l.p2btn);
+    setText('inc-title',l.incTitle); setText('inc-main-label',l.incMain); setText('inc-extra-label',l.incExtra);
+    setText('exp-title',l.expTitle); setText('btn-add-exp',l.addExp); setText('home-title',l.homeTitle);
+    setText('home-people-label',l.homePeople); setText('state-label',l.stateLabel);
+    setText('btn-analyze',l.analyzeBtn); setText('error-box',l.errorMsg);
+    setText('result-title',l.resultTitle); setText('result-sub',l.resultSub);
+    setText('dist-label',l.distLabel); setText('rec-label',l.recLabel);
+    setText('loading-text',l.loadingText);
+    setText('lang-label',lang==='es'?'EN':'ES'); setText('lang-label2',lang==='es'?'EN':'ES');
+    document.getElementById('expenses-list').innerHTML='';
+    t[lang].defaults.slice(0,5).forEach(n=>addExpense(n));
+  }
+
+  function toggleLang(){ lang=lang==='es'?'en':'es'; applyLang(); }
+  function showPage(p){
+    document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+    document.getElementById('page-'+p).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
   function addExpense(name=''){
     const list=document.getElementById('expenses-list');
     const row=document.createElement('div');
     row.className='expense-row';
-    row.innerHTML='<input type="text" placeholder="Nombre del gasto" value="'+name+'" /><div class="amount-input"><span>$</span><input type="number" placeholder="0" min="0" /></div><button class="btn-remove" onclick="this.closest(\'.expense-row\').remove()">✕</button>';
+    row.innerHTML='<input type="text" placeholder="'+(lang==='es'?'Nombre del gasto':'Expense name')+'" value="'+name+'" /><div class="amount-input"><span>$</span><input type="number" placeholder="0" min="0"/></div><button class="btn-remove" onclick="this.closest(\'.expense-row\').remove()">✕</button>';
     list.appendChild(row);
   }
+
   function getExpenses(){
     return Array.from(document.querySelectorAll('.expense-row')).map(row=>{
       const inputs=row.querySelectorAll('input');
       return{name:inputs[0].value.trim(),amount:parseFloat(inputs[1].value)||0};
     }).filter(e=>e.name&&e.amount>0);
   }
+
   async function analyze(){
+    const l=t[lang];
     const incomeMain=parseFloat(document.getElementById('income-main').value)||0;
     const incomeExtra=parseFloat(document.getElementById('income-extra').value)||0;
     const totalIncome=incomeMain+incomeExtra;
@@ -156,28 +387,27 @@
     resultCard.classList.add('visible');
     resultCard.scrollIntoView({behavior:'smooth',block:'start'});
     document.getElementById('summary-grid').innerHTML=
-      '<div class="summary-box"><div class="val green">$'+totalIncome.toLocaleString()+'</div><div class="lbl">Ingresos</div></div>'+
-      '<div class="summary-box"><div class="val red">$'+totalExpense.toLocaleString()+'</div><div class="lbl">Gastos</div></div>'+
-      '<div class="summary-box"><div class="val '+(balance>=0?'green':'red')+'">'+(balance>=0?'+':'-')+' $'+Math.abs(balance).toLocaleString()+'</div><div class="lbl">Balance</div></div>';
+      '<div class="summary-box"><div class="val green">$'+totalIncome.toLocaleString()+'</div><div class="lbl">'+l.incLabel+'</div></div>'+
+      '<div class="summary-box"><div class="val red">$'+totalExpense.toLocaleString()+'</div><div class="lbl">'+l.expLabel+'</div></div>'+
+      '<div class="summary-box"><div class="val '+(balance>=0?'purple':'red')+'">'+(balance>=0?'+':'-')+' $'+Math.abs(balance).toLocaleString()+'</div><div class="lbl">'+l.balLabel+'</div></div>';
     const maxAmt=Math.max(...expenses.map(e=>e.amount));
     document.getElementById('bar-chart').innerHTML=expenses.map(e=>
       '<div class="bar-row"><div class="bar-label">'+e.name+'</div><div class="bar-bg"><div class="bar-fill" style="width:'+Math.round((e.amount/maxAmt)*100)+'%"></div></div><div class="bar-amt">$'+e.amount.toLocaleString()+'</div></div>'
     ).join('');
     document.getElementById('loading-indicator').style.display='flex';
     const aiOutput=document.getElementById('ai-output');
-    const prompt='Eres un asesor financiero amigable para familias americanas.\n\nSituación mensual:\nIngresos: $'+totalIncome+'\nGastos:\n'+expenses.map(e=>'- '+e.name+': $'+e.amount).join('\n')+'\nTotal gastos: $'+totalExpense+'\nBalance: $'+balance+'\nHogar: '+document.getElementById('household').value+' persona(s)\nEstado: '+document.getElementById('state').value+'\n\nDa un análisis en español: evalúa la situación, señala los 2-3 gastos más altos, sugiere cuánto puede ahorrar con cambios específicos, da un consejo práctico para esta semana y una meta realista para 3 meses. Usa números concretos. Máximo 250 palabras.';
+    const expStr=expenses.map(e=>'- '+e.name+': $'+e.amount).join('\n');
+    const hh=document.getElementById('household').value;
+    const st=document.getElementById('state').value;
+    const prompt=l.prompt(totalIncome,totalExpense,balance,expStr,hh,st);
     try{
       const res=await fetch('/api/analyze',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          model:'claude-haiku-4-5-20251001',
-          max_tokens:600,
-          messages:[{role:'user',content:prompt}]
-        })
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:700,messages:[{role:'user',content:prompt}]})
       });
       const data=await res.json();
-      const text=data.content?.[0]?.text||'No se pudo generar el análisis.';
+      const text=data.content?.[0]?.text||'No analysis generated.';
       document.getElementById('loading-indicator').style.display='none';
       const div=document.createElement('div');
       div.className='ai-response';
@@ -185,10 +415,11 @@
       aiOutput.appendChild(div);
     }catch(err){
       document.getElementById('loading-indicator').style.display='none';
-      aiOutput.innerHTML='<p style="color:#dc2626;font-size:14px;">Error al conectar con la IA.</p>';
+      aiOutput.innerHTML='<p style="color:#dc2626;font-size:14px;">Error connecting to AI.</p>';
     }
   }
-  initExpenses();
+
+  applyLang();
 </script>
 </body>
 </html>
