@@ -36,7 +36,6 @@
     .btn-add{background:var(--accent2);border:1.5px dashed var(--accent);border-radius:10px;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:10px;width:100%;cursor:pointer;margin-top:4px;}
     .btn-analyze{background:var(--accent);color:white;border:none;border-radius:12px;font-family:'DM Serif Display',serif;font-size:18px;padding:16px;width:100%;cursor:pointer;margin-top:8px;}
     .btn-analyze:hover{opacity:0.9;}
-    .btn-analyze:disabled{opacity:0.5;cursor:not-allowed;}
     .result-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;display:none;}
     .result-card.visible{display:block;}
     .result-header{background:var(--accent);color:white;padding:16px 20px;}
@@ -110,7 +109,7 @@
     </div>
   </div>
   <div class="error-box" id="error-box">Por favor ingresa al menos un ingreso y un gasto.</div>
-  <button class="btn-analyze" id="btn-analyze" onclick="analyze()">Analizar mi presupuesto →</button>
+  <button class="btn-analyze" onclick="analyze()">Analizar mi presupuesto →</button>
   <div class="result-card" id="result-card">
     <div class="result-header"><h3>Tu análisis financiero</h3><p>Generado por IA · personalizado para ti</p></div>
     <div class="result-body">
@@ -118,15 +117,17 @@
       <div class="section-label">Distribución de gastos</div>
       <div class="bar-wrap" id="bar-chart"></div>
       <div class="section-label" style="margin-top:20px">Recomendaciones de la IA</div>
-      <div id="ai-output"><div class="loading" id="loading-indicator"><div class="spinner"></div>Analizando tu situación financiera...</div></div>
+      <div id="ai-output">
+        <div class="loading" id="loading-indicator">
+          <div class="spinner"></div>Analizando tu situación financiera...
+        </div>
+      </div>
     </div>
   </div>
   <div class="footer">BudgetAI · Powered by Claude AI · Gratis para todos</div>
 </div>
 <script>
-  const CLAUDE_KEY = 'sk-ant-api03-' + 'WcTI2_O-vBLTb3Sh8WwjGu43Idkh_3b_KvtbytdWsJMWXRLFSCRew7zaSdSC1699-Yxp3w7DwRNbGAx6p0wPXg-OJkAwAAA';
-
-  const DEFAULTS = ['Renta / Mortgage','Comida / Groceries','Electricidad','Internet / Celular','Transporte / Gas'];
+  const DEFAULTS=['Renta / Mortgage','Comida / Groceries','Electricidad','Internet / Celular','Transporte / Gas'];
   function initExpenses(){ DEFAULTS.forEach(n=>addExpense(n)); }
   function addExpense(name=''){
     const list=document.getElementById('expenses-list');
@@ -166,16 +167,15 @@
     const aiOutput=document.getElementById('ai-output');
     const prompt='Eres un asesor financiero amigable para familias americanas.\n\nSituación mensual:\nIngresos: $'+totalIncome+'\nGastos:\n'+expenses.map(e=>'- '+e.name+': $'+e.amount).join('\n')+'\nTotal gastos: $'+totalExpense+'\nBalance: $'+balance+'\nHogar: '+document.getElementById('household').value+' persona(s)\nEstado: '+document.getElementById('state').value+'\n\nDa un análisis en español: evalúa la situación, señala los 2-3 gastos más altos, sugiere cuánto puede ahorrar con cambios específicos, da un consejo práctico para esta semana y una meta realista para 3 meses. Usa números concretos. Máximo 250 palabras.';
     try{
-      const res = await fetch('/api/analyze', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 600,
-    messages: [{ role: 'user', content: prompt }]
-  })
-});
-
+      const res=await fetch('/api/analyze',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-haiku-4-5-20251001',
+          max_tokens:600,
+          messages:[{role:'user',content:prompt}]
+        })
+      });
       const data=await res.json();
       const text=data.content?.[0]?.text||'No se pudo generar el análisis.';
       document.getElementById('loading-indicator').style.display='none';
@@ -185,7 +185,7 @@
       aiOutput.appendChild(div);
     }catch(err){
       document.getElementById('loading-indicator').style.display='none';
-      aiOutput.innerHTML='<p style="color:#dc2626;font-size:14px;">Error al conectar con la IA. Verifica tu conexión.</p>';
+      aiOutput.innerHTML='<p style="color:#dc2626;font-size:14px;">Error al conectar con la IA.</p>';
     }
   }
   initExpenses();
