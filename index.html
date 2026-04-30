@@ -166,16 +166,15 @@
     const aiOutput=document.getElementById('ai-output');
     const prompt='Eres un asesor financiero amigable para familias americanas.\n\nSituación mensual:\nIngresos: $'+totalIncome+'\nGastos:\n'+expenses.map(e=>'- '+e.name+': $'+e.amount).join('\n')+'\nTotal gastos: $'+totalExpense+'\nBalance: $'+balance+'\nHogar: '+document.getElementById('household').value+' persona(s)\nEstado: '+document.getElementById('state').value+'\n\nDa un análisis en español: evalúa la situación, señala los 2-3 gastos más altos, sugiere cuánto puede ahorrar con cambios específicos, da un consejo práctico para esta semana y una meta realista para 3 meses. Usa números concretos. Máximo 250 palabras.';
     try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'x-api-key': CLAUDE_KEY,
-          'anthropic-version':'2023-06-01',
-          'anthropic-dangerous-direct-browser-access':'true'
-        },
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages:[{role:'user',content:prompt}]})
-      });
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({
+  model: 'claude-haiku-4-5-20251001',
+  max_tokens: 600,
+  messages: [{ role: 'user', content: prompt }]
+});
+
       const data=await res.json();
       const text=data.content?.[0]?.text||'No se pudo generar el análisis.';
       document.getElementById('loading-indicator').style.display='none';
